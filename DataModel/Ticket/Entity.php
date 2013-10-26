@@ -13,7 +13,7 @@ class Entity extends AbstractEntity
      * @var array
      */
     protected $_readOnlyFields = array(
-            'id', 
+            'id',
             'url',
             'description',
             'recipient',
@@ -25,7 +25,7 @@ class Entity extends AbstractEntity
             'created_at',
             'updated_at'
             );
-    
+
     /**
      * These fields are required.
      * @var array
@@ -33,7 +33,7 @@ class Entity extends AbstractEntity
     protected $_mandatoryFields = array(
             'requester_id',
             );
-    
+
     /**
      * Primary key is id.
      * @see \Malwarebytes\ZendeskBundle\DataModel\AbstractEntity::getPrimaryKey()
@@ -43,7 +43,7 @@ class Entity extends AbstractEntity
     {
         return 'id';
     }
-    
+
     /**
      * @see \Malwarebytes\ZendeskBundle\DataModel\AbstractEntity::getType()
      * @return string
@@ -52,7 +52,7 @@ class Entity extends AbstractEntity
     {
         return 'ticket';
     }
-    
+
     /**
      * Returns comments
      * @return array
@@ -66,7 +66,7 @@ class Entity extends AbstractEntity
      * Adds a comment to the ticket. Automatically saves as well. Use ArrayAccess approach at your own peril.
      * @param string $comment
      * @param bool $public
-     * @return Entity 
+     * @return Entity
      */
     public function addComment( $comment, $public = true )
     {
@@ -88,5 +88,27 @@ class Entity extends AbstractEntity
     public function update()
     {
         $this->_repository->save($this);
+    }
+
+    public function addTag($tag)
+    {
+        if(!isset($this['tags']) || !is_array($this['tags'])) {
+            $this['tags'] = array($tag);
+        } else {
+            if(!in_array($tag, $this['tags'])) {
+                $tags = $this['tags'];
+                $tags[] = $tag;
+                $this['tags'] = $tags;
+            }
+        }
+    }
+
+    public function removeTag($tag)
+    {
+        if(isset($this['tags']) && in_array($tag, $this['tags'])) {
+            $tags = $this['tags'];
+            if (($key = array_search($tag, $tags)) !== false) unset($tags[$key]);
+            $this['tags'] = $tags;
+        }
     }
 }

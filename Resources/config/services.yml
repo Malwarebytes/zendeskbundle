@@ -9,7 +9,7 @@ services:
         arguments: [%zendesk_api_key%, %zendesk_api_user%, %zendesk_api_subdomain%]
     zendesk.repos:
         class: %zendesk.repositoryservice.class%
-        arguments: [@zendesk.api]
+        arguments: ['@zendesk.api']
     zendesk.service:
         class: %zendesk.zendeskservice.class%
-        arguments: [@zendesk.repos]
+        arguments: ['@zendesk.repos']
